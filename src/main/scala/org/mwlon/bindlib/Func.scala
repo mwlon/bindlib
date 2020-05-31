@@ -21,8 +21,8 @@ trait Func[+T] {
     }).get
   }
 
-  def bind(bindings: Bindings): Func[T] = {
-    implicit val bindCache: BindCache = new BindCache(bindings)
+  def bind(bindings: Map[BindVar[_], Any]): Func[T] = {
+    implicit val bindCache: BindCache = new BindCache(Bindings(bindings))
     bindCache.get(this)
   }
   def cachedBind(bindings: Bindings)(implicit bindCache: BindCache): Func[T]

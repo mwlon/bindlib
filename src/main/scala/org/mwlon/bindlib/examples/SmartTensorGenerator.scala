@@ -26,7 +26,7 @@ object SmartTensorGenerator {
       bindingMap(mults(i)) = strides(i)
     })
     val getFlatIndFunc = Plus(prodTerms: _*)
-      .bind(Bindings(bindingMap.toMap))
+      .bind(bindingMap.toMap)
     val clazz = TensorTemplate.generate(getFlatIndFunc, shape)
     clazz.getDeclaredConstructors()(0).newInstance(data).asInstanceOf[Tensor]
   }

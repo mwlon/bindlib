@@ -14,9 +14,9 @@ case class For(loopVar: IntVar, n: Func[Int], op: Func[Unit], config: ForConfig 
     (boundN.getOption, boundOp) match {
       case (_, Noop) => Noop
       case (Some(0), _) => Noop
-      case (Some(1), _) => boundOp.bind(Bindings(Map(loopVar -> 0)))
+      case (Some(1), _) => boundOp.bind(Map(loopVar -> 0))
       case (Some(nLoops), _) if nLoops <= config.fullExpansionLimit =>
-        Multi((0 until nLoops).map((i) => boundOp.bind(Bindings(Map(loopVar -> i)))))
+        Multi((0 until nLoops).map((i) => boundOp.bind(Map(loopVar -> i))))
       case (None, _) =>
         For(loopVar, boundN, boundOp, config)
     }
