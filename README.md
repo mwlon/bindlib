@@ -26,7 +26,7 @@ val boundFunc0: Func[Int] = myFunc.bind(Map(
   a -> 1
 ))
 println(boundFunc0.toString())
-// 2
+// 3
 
 val boundFunc1: Func[Int] = myFunc.bind(Map(
   b -> false,
