@@ -1,4 +1,4 @@
-name := "mypl"
+name := "bindlib"
 
 version := "0.1"
 

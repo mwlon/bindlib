@@ -18,7 +18,6 @@ object ConstantCodifier {
   }
 
   implicit object StringCodifier extends ConstantCodifier[String] {
-    //this doesn't entirely work
-    override def toCode(t: String): String = s"""${t}"""
+    override def toCode(t: String): String = "\"" + t.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
   }
 }
