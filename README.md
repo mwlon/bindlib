@@ -156,4 +156,4 @@ expressions is rather far-fetched. How would you make this happen?
 
 A: Yeah, it's probably not happening, and certainly not happening soon.
 But I have an idea for how I can almost get it working without contributing to
-scala, by leveraging the Scalamenta library.
+scala, by leveraging the Scalameta library.
