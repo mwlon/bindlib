@@ -60,7 +60,51 @@ counterpart (written as best possible) shows at least a 10x speedup.
 * the static code took 714ms
 * the dynamic code bindlib generated took 42ms.
 
-## (theoretical) Example 3: Cluster Computing
+## (theoretical) Example 3: CSV parsing
+A manual way to parse a CSV and sum the 'x' column:
+
+```
+var maybeXIndex: Option[Int] = None
+var sum = 0
+for (line <- file) {
+  if (!maybeXIndex.isEmpty) {
+    //supposing computeHeader returns Option[Header]
+    computeHeader(line).forEach(header => {
+      maybeXIndex = Some(header.indexOf("x"))
+    })
+  } else {
+    sum += parseIntFrom(line, maybeXIndex.get)
+  }
+}
+```
+
+This is clearly slower than necessary: on every line after the header it does an unnecessary `if`, and it keeps doing `maybeXIndex.get`, since maybeXIndex is an Option.
+In this simple example, there's also an ordinary way to boost efficiency.
+But in a more complicated case, we might not have that leisure.
+Also, it would be nice if we can make the programmer's job of boosting efficiency easier.
+Here's how this would be theoretically doable with bindlang (an as-yet non-existent programming language resembling this library):
+
+```
+
+def processLine(maybeXIndex: Option[Int], line: String): Unit = {
+  if (maybeHeader.isEmpty) {
+    //supposing computeHeader returns Option[Header]
+    computeHeader(line).forEach(header => {
+      val xIndex = header.indexOf("x")
+      processFn = processLine.bind(maybeXIndex=Some(xIndex))
+    })
+  } else {
+    sum += parseIntFrom(line, maybeXIndex.get)
+  }
+}
+var processFn = processLine.bind(maybeXIndex=None)
+
+for (line <- file) {
+  processFn()
+}
+```
+
+## (theoretical) Example 4: Cluster Computing
 
 This one is a bit esoteric and complicated, but it's something I've been thinking about.
 Say we have a Spark Dataset and want to sum a column, grouped by id:
@@ -157,3 +201,4 @@ expressions is rather far-fetched. How would you make this happen?
 A: Yeah, it's probably not happening, and certainly not happening soon.
 But I have an idea for how I can almost get it working without contributing to
 scala, by leveraging the Scalameta library.
+
